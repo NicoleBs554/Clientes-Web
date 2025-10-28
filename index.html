@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Matrices</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Calculadora de Matrices</h1>
+            <p class="subtitle">Realiza operaciones con matrices de hasta 10×10</p>
+        </header>
+        
+        <div class="main-content">
+            <section class="input-section">
+                <div class="section-title">Configuración de Matrices</div>
+                
+                <div class="matrix-controls">
+                    <div class="matrix-input">
+                        <h3>Matriz A</h3>
+                        <div class="dimension-inputs">
+                            <input type="number" id="rowsA" min="1" max="10" value="2" placeholder="Filas">
+                            <span>×</span>
+                            <input type="number" id="colsA" min="1" max="10" value="2" placeholder="Columnas">
+                            <button id="generateA">Generar</button>
+                        </div>
+                        <div class="matrix-container" id="matrixAContainer">
+                            <!-- La matriz A se generará aquí -->
+                        </div>
+                    </div>
+                    
+                    <div class="matrix-input">
+                        <h3>Matriz B</h3>
+                        <div class="dimension-inputs">
+                            <input type="number" id="rowsB" min="1" max="10" value="2" placeholder="Filas">
+                            <span>×</span>
+                            <input type="number" id="colsB" min="1" max="10" value="2" placeholder="Columnas">
+                            <button id="generateB">Generar</button>
+                        </div>
+                        <div class="matrix-container" id="matrixBContainer">
+                            <!-- La matriz B se generará aquí -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scalar-input">
+                    <label for="scalarValue">Valor escalar (k):</label>
+                    <input type="number" id="scalarValue" value="2" step="any">
+                </div>
+                
+                <div class="scalar-input">
+                    <label for="identitySize">Tamaño matriz identidad (n):</label>
+                    <input type="number" id="identitySize" min="2" max="10" value="3">
+                </div>
+            </section>
+            
+            <section class="operations-section">
+                <div class="section-title">Operaciones</div>
+                
+                <div class="operations-grid">
+                    <div class="operation-btn" data-operation="add">Suma (A + B)</div>
+                    <div class="operation-btn" data-operation="subtractAB">Resta (A - B)</div>
+                    <div class="operation-btn" data-operation="subtractBA">Resta (B - A)</div>
+                    <div class="operation-btn" data-operation="multiply">Multiplicación (A × B)</div>
+                    <div class="operation-btn" data-operation="scalarA">Multiplicación escalar (k × A)</div>
+                    <div class="operation-btn" data-operation="scalarB">Multiplicación escalar (k × B)</div>
+                    <div class="operation-btn" data-operation="transposeA">Transposición (A<sup>T</sup>)</div>
+                    <div class="operation-btn" data-operation="transposeB">Transposición (B<sup>T</sup>)</div>
+                    <div class="operation-btn" data-operation="determinantA">Determinante (det A)</div>
+                    <div class="operation-btn" data-operation="determinantB">Determinante (det B)</div>
+                    <div class="operation-btn" data-operation="inverseA">Inversa (A<sup>-1</sup>)</div>
+                    <div class="operation-btn" data-operation="inverseB">Inversa (B<sup>-1</sup>)</div>
+                    <div class="operation-btn" data-operation="identity">Matriz Identidad (I<sub>n</sub>)</div>
+                </div>
+                
+                <div class="results-section">
+                    <div class="section-title">Resultados</div>
+                    <div id="resultsContainer">
+                        <p>Selecciona una operación para ver los resultados.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <footer>
+            <p>Calculadora de Matrices Super cool &copy; 2025 - Creada con HTML, CSS y JavaScript</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
