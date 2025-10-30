@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Matrices</title>
+    <title>Calculadora de Matrices Avanzada</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Calculadora de Matrices</h1>
-            <p class="subtitle">Realiza operaciones con matrices de hasta 10×10</p>
+            <h1>🧮 Calculadora de Matrices</h1>
+            <p class="subtitle">Operaciones con matrices de 2×2 hasta 10×10</p>
         </header>
         
         <div class="main-content">
@@ -19,73 +19,76 @@
                 
                 <div class="matrix-controls">
                     <div class="matrix-input">
-                        <h3>Matriz A</h3>
+                        <h3>📊 Matriz A</h3>
                         <div class="dimension-inputs">
-                            <input type="number" id="rowsA" min="1" max="10" value="2" placeholder="Filas">
+                            <input type="number" id="rowsA" min="2" max="10" value="2" placeholder="Filas">
                             <span>×</span>
-                            <input type="number" id="colsA" min="1" max="10" value="2" placeholder="Columnas">
-                            <button id="generateA">Generar</button>
+                            <input type="number" id="colsA" min="2" max="10" value="2" placeholder="Columnas">
+                            <button id="generateA" class="btn-generate">🔄 Generar</button>
                         </div>
                         <div class="matrix-container" id="matrixAContainer">
-                            <!-- La matriz A se generará aquí -->
+                            <!-- Matriz A se genera aquí -->
                         </div>
                     </div>
                     
                     <div class="matrix-input">
-                        <h3>Matriz B</h3>
+                        <h3>📊 Matriz B</h3>
                         <div class="dimension-inputs">
-                            <input type="number" id="rowsB" min="1" max="10" value="2" placeholder="Filas">
+                            <input type="number" id="rowsB" min="2" max="10" value="2" placeholder="Filas">
                             <span>×</span>
-                            <input type="number" id="colsB" min="1" max="10" value="2" placeholder="Columnas">
-                            <button id="generateB">Generar</button>
+                            <input type="number" id="colsB" min="2" max="10" value="2" placeholder="Columnas">
+                            <button id="generateB" class="btn-generate">🔄 Generar</button>
                         </div>
                         <div class="matrix-container" id="matrixBContainer">
-                            <!-- La matriz B se generará aquí -->
+                            <!-- Matriz B se genera aquí -->
                         </div>
                     </div>
                 </div>
                 
-                <div class="scalar-input">
-                    <label for="scalarValue">Valor escalar (k):</label>
-                    <input type="number" id="scalarValue" value="2" step="any">
-                </div>
-                
-                <div class="scalar-input">
-                    <label for="identitySize">Tamaño matriz identidad (n):</label>
-                    <input type="number" id="identitySize" min="2" max="10" value="3">
+                <div class="additional-controls">
+                    <div class="control-group">
+                        <label for="scalarValue">🔢 Valor escalar (k):</label>
+                        <input type="number" id="scalarValue" value="2" step="any">
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="identitySize">🔷 Tamaño matriz identidad (n):</label>
+                        <input type="number" id="identitySize" min="2" max="10" value="3">
+                    </div>
+                    
+                    <button id="randomExample" class="btn-random">🎲 Ejemplo Aleatorio</button>
+                    <button id="runTests" class="btn-test">🧪 Ejecutar Pruebas</button>
                 </div>
             </section>
             
             <section class="operations-section">
-                <div class="section-title">Operaciones</div>
+                <div class="section-title">Operaciones Disponibles</div>
                 
                 <div class="operations-grid">
-                    <div class="operation-btn" data-operation="add">Suma (A + B)</div>
-                    <div class="operation-btn" data-operation="subtractAB">Resta (A - B)</div>
-                    <div class="operation-btn" data-operation="subtractBA">Resta (B - A)</div>
-                    <div class="operation-btn" data-operation="multiply">Multiplicación (A × B)</div>
-                    <div class="operation-btn" data-operation="scalarA">Multiplicación escalar (k × A)</div>
-                    <div class="operation-btn" data-operation="scalarB">Multiplicación escalar (k × B)</div>
-                    <div class="operation-btn" data-operation="transposeA">Transposición (A<sup>T</sup>)</div>
-                    <div class="operation-btn" data-operation="transposeB">Transposición (B<sup>T</sup>)</div>
-                    <div class="operation-btn" data-operation="determinantA">Determinante (det A)</div>
-                    <div class="operation-btn" data-operation="determinantB">Determinante (det B)</div>
-                    <div class="operation-btn" data-operation="inverseA">Inversa (A<sup>-1</sup>)</div>
-                    <div class="operation-btn" data-operation="inverseB">Inversa (B<sup>-1</sup>)</div>
-                    <div class="operation-btn" data-operation="identity">Matriz Identidad (I<sub>n</sub>)</div>
+                    <div class="operation-btn" data-operation="add">➕ Suma (A + B)</div>
+                    <div class="operation-btn" data-operation="subtractAB">➖ Resta (A - B)</div>
+                    <div class="operation-btn" data-operation="subtractBA">➖ Resta (B - A)</div>
+                    <div class="operation-btn" data-operation="multiply">✖️ Multiplicación (A × B)</div>
+                    <div class="operation-btn" data-operation="scalarA">🔢 Escalar × A</div>
+                    <div class="operation-btn" data-operation="scalarB">🔢 Escalar × B</div>
+                    <div class="operation-btn" data-operation="transposeA">📐 Transpuesta Aᵀ</div>
+                    <div class="operation-btn" data-operation="determinantA">📏 Determinante A</div>
+                    <div class="operation-btn" data-operation="inverseA">🔄 Inversa A⁻¹</div>
+                    <div class="operation-btn" data-operation="identity">🔷 Identidad Iₙ</div>
                 </div>
                 
                 <div class="results-section">
-                    <div class="section-title">Resultados</div>
+                    <div class="section-title">🎯 Resultados</div>
                     <div id="resultsContainer">
-                        <p>Selecciona una operación para ver los resultados.</p>
+                        <p class="placeholder">Selecciona una operación para ver los resultados.</p>
                     </div>
+                    <div id="testResults" class="test-results"></div>
                 </div>
             </section>
         </div>
         
         <footer>
-            <p>Calculadora de Matrices Super cool &copy; 2025 - Creada con HTML, CSS y JavaScript</p>
+            <p>Calculadora de Matrices Super cool - Creada con HTML, CSS y JavaScript</p>
         </footer>
     </div>
 
