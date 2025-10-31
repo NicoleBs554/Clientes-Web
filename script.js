@@ -1,9 +1,8 @@
-// Variables globales
+// VARIABLES GLOBALES 
 let matrixA = [];
 let matrixB = [];
 let isProcessing = false;
 
-// Elementos del DOM
 const generateAButton = document.getElementById('generateA');
 const generateBButton = document.getElementById('generateB');
 const randomExampleButton = document.getElementById('randomExample');
@@ -13,10 +12,8 @@ const resultsContainer = document.getElementById('resultsContainer');
 const testResults = document.getElementById('testResults');
 const verificationMessage = document.getElementById('verificationMessage');
 
-// Botones de operaciones
 const operationButtons = document.querySelectorAll('.operation-btn');
 
-// Inicialización
 document.addEventListener('DOMContentLoaded', function() {
     initializeCalculator();
 });
@@ -29,17 +26,13 @@ function initializeCalculator() {
 }
 
 function setupEventListeners() {
-    // Botones de generación
     generateAButton.addEventListener('click', () => generateMatrix('A'));
     generateBButton.addEventListener('click', () => generateMatrix('B'));
     
-    // Botón de ejemplo aleatorio
     randomExampleButton.addEventListener('click', generateRandomExample);
-    
-    // Botón de pruebas
+
     runTestsButton.addEventListener('click', runAutomatedTests);
-    
-    // Operaciones
+
     operationButtons.forEach(button => {
         button.addEventListener('click', function() {
             if (isProcessing) return;
@@ -54,8 +47,7 @@ function updateStatus(message, type = 'info') {
     
     statusMessage.textContent = message;
     statusMessage.className = `status-message ${type}-message`;
-    
-    // Crear notificación temporal
+
     if (type === 'error' || type === 'success') {
         const notification = document.createElement('div');
         notification.className = `notification ${type}-message`;
@@ -78,23 +70,20 @@ function updateStatus(message, type = 'info') {
     }
 }
 
-// Generar matriz con inputs
 function generateMatrix(matrix) {
     if (isProcessing) return;
     
     const sizeInput = document.getElementById(`size${matrix}`);
     const size = parseInt(sizeInput.value);
     const container = document.getElementById(`matrix${matrix}Container`);
-    
-    // Validar dimensiones
+
     if (size < 2 || size > 10) {
         showError(`El tamaño de la matriz debe estar entre 2 y 10. Valor ingresado: ${size}`);
         return;
     }
     
     showLoading(true);
-    
-    // Generar tabla con mejoras visuales
+
     setTimeout(() => {
         let html = `<table class="matrix-table" id="table${matrix}">`;
         for (let i = 0; i < size; i++) {
@@ -123,7 +112,6 @@ function generateMatrix(matrix) {
     }, 300);
 }
 
-// Actualizar matriz desde inputs
 function updateMatrixFromInputs(matrix) {
     const sizeInput = document.getElementById(`size${matrix}`);
     const size = parseInt(sizeInput.value);
@@ -157,7 +145,6 @@ function updateMatrixFromInputs(matrix) {
     return !hasError;
 }
 
-// Generar ejemplo aleatorio
 function generateRandomExample() {
     if (!updateMatrixFromInputs('A') || !updateMatrixFromInputs('B')) {
         showError('Por favor, corrige los valores inválidos (en rojo) antes de generar ejemplos');
@@ -186,7 +173,6 @@ function generateRandomExample() {
     updateStatus('Ejemplo aleatorio generado', 'success');
 }
 
-// Realizar operación seleccionada
 function performOperation(operation) {
     if (isProcessing) return;
     
@@ -471,8 +457,7 @@ function gaussJordanInversion(matrix) {
             augmented[i].push(i === j ? 1 : 0);
         }
     }
-    
-    // Aplicar eliminación de Gauss-Jordan
+
     for (let i = 0; i < n; i++) {
         // Pivoteo parcial
         let maxRow = i;
