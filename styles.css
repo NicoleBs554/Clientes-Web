@@ -1,15 +1,13 @@
 :root {
-    --primary-color: #1a2a6c;
-    --secondary-color: #4a6fc7;
-    --accent-color: #b21f1f;
-    --success-color: #2e7d32;
-    --error-color: #c62828;
-    --warning-color: #f57c00;
-    --background-color: rgba(255, 255, 255, 0.95);
-    --text-color: #333;
-    --border-color: #ddd;
-    --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    --transition: all 0.3s ease;
+    --color-principal: #1a2a6c;
+    --color-secundario: #4a6fc7;
+    --color-acento: #b21f1f;
+    --color-exito: #2e7d32;
+    --color-error: #c62828;
+    --color-advertencia: #f57c00;
+    --color-fondo: white;
+    --color-texto: #333;
+    --color-borde: #ddd;
 }
 
 * {
@@ -21,7 +19,7 @@
 
 body {
     background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-    color: var(--text-color);
+    color: var(--color-texto);
     min-height: 100vh;
     padding: 20px;
 }
@@ -29,20 +27,15 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    background-color: var(--background-color);
+    background-color: var(--color-fondo);
     border-radius: 15px;
-    box-shadow: var(--shadow);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     padding: 30px;
-    overflow: hidden;
-    position: relative;
 }
 
 header {
     text-align: center;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #eee;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(135deg, var(--color-principal), var(--color-secundario));
     color: white;
     margin: -30px -30px 30px -30px;
     padding: 30px;
@@ -53,7 +46,6 @@ h1 {
     color: white;
     font-size: 2.5rem;
     margin-bottom: 10px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .subtitle {
@@ -78,13 +70,12 @@ h1 {
 }
 
 .section-title {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(135deg, var(--color-principal), var(--color-secundario));
     color: white;
     padding: 12px 20px;
     border-radius: 8px;
     margin-bottom: 20px;
     font-size: 1.3rem;
-    box-shadow: 0 4px 12px rgba(26, 42, 108, 0.3);
 }
 
 .matrix-controls {
@@ -101,20 +92,11 @@ h1 {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: var(--transition);
-}
-
-.matrix-input:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
 .matrix-input h3 {
     margin-bottom: 10px;
-    color: var(--primary-color);
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    color: var(--color-principal);
 }
 
 .dimension-inputs {
@@ -127,47 +109,36 @@ h1 {
 
 .dimension-inputs label {
     font-weight: 600;
-    color: var(--primary-color);
+    color: var(--color-principal);
     min-width: 100px;
 }
 
 input[type="number"] {
     padding: 10px;
-    border: 2px solid var(--border-color);
+    border: 2px solid var(--color-borde);
     border-radius: 5px;
     width: 70px;
     text-align: center;
     font-weight: 600;
-    transition: var(--transition);
 }
 
 input[type="number"]:focus {
     outline: none;
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 0 3px rgba(74, 111, 199, 0.2);
+    border-color: var(--color-secundario);
 }
 
 button {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(135deg, var(--color-principal), var(--color-secundario));
     color: white;
     border: none;
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
-    transition: var(--transition);
     font-weight: bold;
-    position: relative;
-    overflow: hidden;
 }
 
 button:hover {
-    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(26, 42, 108, 0.4);
-}
-
-button:active {
-    transform: translateY(0);
+    background: linear-gradient(135deg, var(--color-secundario), var(--color-principal));
 }
 
 .matrix-container {
@@ -185,19 +156,13 @@ button:active {
 }
 
 .matrix-table td {
-    border: 2px solid var(--border-color);
+    border: 2px solid var(--color-borde);
     padding: 10px;
     text-align: center;
     width: 60px;
     height: 50px;
     background: white;
     border-radius: 5px;
-    transition: var(--transition);
-}
-
-.matrix-table td:hover {
-    border-color: var(--secondary-color);
-    transform: scale(1.05);
 }
 
 .matrix-table input {
@@ -216,6 +181,7 @@ button:active {
     border-radius: 3px;
 }
 
+
 .operations-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -224,39 +190,19 @@ button:active {
 }
 
 .operation-btn {
-    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+    background: linear-gradient(135deg, var(--color-secundario), var(--color-principal));
     padding: 15px;
     border-radius: 8px;
     text-align: center;
     cursor: pointer;
-    transition: var(--transition);
     font-weight: bold;
     color: white;
-    position: relative;
-    overflow: hidden;
     border: 2px solid transparent;
 }
 
-.operation-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
-}
-
-.operation-btn:hover::before {
-    left: 100%;
-}
-
 .operation-btn:hover {
-    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    border-color: var(--accent-color);
+    background: linear-gradient(135deg, var(--color-principal), var(--color-acento));
+    border-color: var(--color-acento);
 }
 
 .additional-controls {
@@ -277,7 +223,7 @@ button:active {
 
 .control-group label {
     font-weight: 600;
-    color: var(--primary-color);
+    color: var(--color-principal);
     min-width: 150px;
 }
 
@@ -304,36 +250,36 @@ button:active {
     background: linear-gradient(135deg, #f9f9f9, #f0f0f0);
     border-radius: 8px;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-    border-left: 4px solid var(--success-color);
+    border-left: 4px solid var(--color-exito);
 }
 
 .error-message {
     background: linear-gradient(135deg, #ffebee, #ffcdd2);
-    color: var(--error-color);
+    color: var(--color-error);
     padding: 15px;
     border-radius: 8px;
     margin-top: 15px;
-    border-left: 4px solid var(--error-color);
+    border-left: 4px solid var(--color-error);
     font-weight: 600;
 }
 
 .success-message {
     background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-    color: var(--success-color);
+    color: var(--color-exito);
     padding: 15px;
     border-radius: 8px;
     margin-top: 15px;
-    border-left: 4px solid var(--success-color);
+    border-left: 4px solid var(--color-exito);
     font-weight: 600;
 }
 
 .warning-message {
     background: linear-gradient(135deg, #fff3e0, #ffe0b2);
-    color: var(--warning-color);
+    color: var(--color-advertencia);
     padding: 15px;
     border-radius: 8px;
     margin-top: 15px;
-    border-left: 4px solid var(--warning-color);
+    border-left: 4px solid var(--color-advertencia);
     font-weight: 600;
 }
 
@@ -341,23 +287,17 @@ button:active {
     display: inline-block;
     margin: 10px;
     padding: 15px;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-borde);
     border-radius: 5px;
     background-color: white;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-    transition: var(--transition);
-}
-
-.matrix-display:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
 }
 
 .matrix-display h4 {
-    color: var(--primary-color);
+    color: var(--color-principal);
     margin-bottom: 10px;
     text-align: center;
-    border-bottom: 2px solid var(--secondary-color);
+    border-bottom: 2px solid var(--color-secundario);
     padding-bottom: 5px;
 }
 
@@ -373,19 +313,6 @@ button:active {
     background: #f9f9f9;
     border-radius: 4px;
     font-weight: 600;
-    transition: var(--transition);
-}
-
-.matrix-display td:hover {
-    background: #f0f0f0;
-}
-
-.verification {
-    margin-top: 20px;
-    padding: 15px;
-    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-    border-radius: 8px;
-    border-left: 4px solid #2196f3;
 }
 
 .test-results {
@@ -401,17 +328,16 @@ button:active {
     margin: 8px 0;
     border-radius: 5px;
     border-left: 4px solid;
-    transition: var(--transition);
 }
 
 .test-result.passed {
     background: rgba(46, 204, 113, 0.1);
-    border-color: var(--success-color);
+    border-color: var(--color-exito);
 }
 
 .test-result.failed {
     background: rgba(231, 76, 60, 0.1);
-    border-color: var(--error-color);
+    border-color: var(--color-error);
 }
 
 .progress-bar {
@@ -425,8 +351,7 @@ button:active {
 
 .progress {
     height: 100%;
-    background: linear-gradient(90deg, var(--success-color), var(--secondary-color));
-    transition: width 0.5s ease;
+    background: linear-gradient(90deg, var(--color-exito), var(--color-secundario));
     border-radius: 10px;
 }
 
@@ -436,7 +361,7 @@ button:active {
     background: rgba(255, 255, 255, 0.7);
     border-radius: 8px;
     text-align: center;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--color-borde);
 }
 
 .status-bar {
@@ -450,8 +375,6 @@ button:active {
     text-align: center;
     font-weight: 600;
     z-index: 1000;
-    backdrop-filter: blur(10px);
-    border-top: 2px solid var(--secondary-color);
 }
 
 footer {
@@ -460,74 +383,9 @@ footer {
     padding-top: 20px;
     border-top: 1px solid #eee;
     color: #666;
-    padding-bottom: 60px; /* Espacio para la barra de estado */
+    padding-bottom: 60px; 
 }
 
-/* Tooltips */
-.operation-btn[data-tooltip] {
-    position: relative;
-}
-
-.operation-btn[data-tooltip]:hover::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--primary-color);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 12px;
-    white-space: nowrap;
-    z-index: 1000;
-    margin-bottom: 5px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Estados de carga */
-.loading {
-    opacity: 0.7;
-    pointer-events: none;
-    position: relative;
-}
-
-.loading::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    margin: -10px 0 0 -10px;
-    border: 2px solid transparent;
-    border-top: 2px solid var(--secondary-color);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Animaciones */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.matrix-input, .operation-btn, .result-container {
-    animation: fadeIn 0.5s ease-out;
-}
-
-/* Responsive Design */
 @media (max-width: 768px) {
     .main-content {
         flex-direction: column;
@@ -602,7 +460,7 @@ footer {
 .det-value {
     font-size: 2rem;
     font-weight: bold;
-    color: var(--success-color);
+    color: var(--color-exito);
     margin: 10px 0;
 }
 
