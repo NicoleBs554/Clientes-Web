@@ -47,27 +47,6 @@ function updateStatus(message, type = 'info') {
     
     statusMessage.textContent = message;
     statusMessage.className = `status-message ${type}-message`;
-
-    if (type === 'error' || type === 'success') {
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}-message`;
-        notification.textContent = message;
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
-            z-index: 1000;
-            max-width: 300px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        `;
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.remove();
-        }, 4000);
-    }
 }
 
 function generateMatrix(matrix) {
@@ -221,7 +200,7 @@ function performOperation(operation) {
                     break;
                     
                 case 'multiply':
-                    validateMatricesForOperation();
+                    validateMatricesForMultiplication();
                     result = multiplyMatrices(matrixA, matrixB);
                     break;
                     
@@ -276,9 +255,8 @@ function performOperation(operation) {
     }, 500);
 }
 
-// === FUNCIONES MATEMÁTICAS ===
+// === FUNCIONES MATEMÁTICAS CORREGIDAS ===
 
-// Suma de matrices
 function addMatrices(a, b) {
     if (a.length !== b.length || a[0].length !== b[0].length) {
         throw new Error("Las matrices deben tener las mismas dimensiones para la suma");
@@ -295,7 +273,6 @@ function addMatrices(a, b) {
     return result;
 }
 
-// Resta de matrices
 function subtractMatrices(a, b) {
     if (a.length !== b.length || a[0].length !== b[0].length) {
         throw new Error("Las matrices deben tener las mismas dimensiones para la resta");
@@ -312,7 +289,6 @@ function subtractMatrices(a, b) {
     return result;
 }
 
-// Multiplicación de matrices
 function multiplyMatrices(a, b) {
     if (a[0].length !== b.length) {
         throw new Error("El número de columnas de A debe ser igual al número de filas de B");
@@ -333,7 +309,6 @@ function multiplyMatrices(a, b) {
     return result;
 }
 
-// Multiplicación por escalar
 function scalarMultiply(matrix, scalar) {
     const result = [];
     for (let i = 0; i < matrix.length; i++) {
@@ -346,7 +321,6 @@ function scalarMultiply(matrix, scalar) {
     return result;
 }
 
-// Transposición de matriz
 function transposeMatrix(matrix) {
     const result = [];
     for (let j = 0; j < matrix[0].length; j++) {
@@ -359,7 +333,6 @@ function transposeMatrix(matrix) {
     return result;
 }
 
-// Determinante con eliminación gaussiana
 function calculateDeterminant(matrix) {
     if (matrix.length !== matrix[0].length) {
         throw new Error("La matriz debe ser cuadrada para calcular el determinante");
@@ -415,7 +388,6 @@ function gaussianDeterminant(matrix) {
     return det;
 }
 
-// Matriz inversa con Gauss-Jordan
 function invertMatrix(matrix) {
     if (matrix.length !== matrix[0].length) {
         throw new Error("La matriz debe ser cuadrada para calcular la inversa");
@@ -504,7 +476,6 @@ function gaussJordanInversion(matrix) {
     return inverse;
 }
 
-// Matriz identidad
 function generateIdentityMatrix(n) {
     const identity = [];
     for (let i = 0; i < n; i++) {
@@ -517,7 +488,6 @@ function generateIdentityMatrix(n) {
     return identity;
 }
 
-// Verificación de inversa
 function verifyInverse(A, Ainv) {
     const n = A.length;
     const product = multiplyMatrices(A, Ainv);
@@ -550,7 +520,6 @@ function verifyInverse(A, Ainv) {
 
 // === FUNCIONES DE VISUALIZACIÓN ===
 
-// Mostrar resultados
 function displayResult(operation, result, error) {
     if (!resultsContainer) return;
     
@@ -643,68 +612,40 @@ function matrixToHTML(matrix) {
 }
 
 // === PRUEBAS AUTOMÁTICAS ===
-
 function runAutomatedTests() {
     if (!testResults) return;
     
     testResults.innerHTML = '<h4>🧪 Ejecutando Pruebas Automáticas...</h4>';
     
     const tests = [
-        { name: 'Suma de matrices 2x2', test: testSuma, weight: 1 },
-        { name: 'Multiplicación de matrices', test: testMultiplicacion, weight: 1 },
-        { name: 'Determinante 2x2', test: testDeterminante2x2, weight: 1 },
-        { name: 'Transposición', test: testTransposicion, weight: 1 },
-        { name: 'Matriz Identidad', test: testIdentidad, weight: 1 },
-        { name: 'Matriz Inversa', test: testInversa, weight: 2 }
+        { name: 'Suma de matrices 2x2', test: testSuma },
+        { name: 'Multiplicación de matrices', test: testMultiplicacion },
+        { name: 'Determinante 2x2', test: testDeterminante2x2 },
+        { name: 'Transposición', test: testTransposicion },
+        { name: 'Matriz Identidad', test: testIdentidad },
+        { name: 'Matriz Inversa', test: testInversa }
     ];
 
-    let totalScore = 0;
-    let maxScore = tests.reduce((sum, test) => sum + test.weight, 0);
-    let resultsHTML = '';
-    let completed = 0;
+    let passed = 0;
+    let failed = 0;
 
     tests.forEach((testObj, index) => {
         setTimeout(() => {
             try {
                 const result = testObj.test();
-                const score = result.passed ? testObj.weight : 0;
-                totalScore += score;
-                completed++;
-                
-                resultsHTML += `
-                    <div class="test-result ${result.passed ? 'passed' : 'failed'}">
-                        ${result.passed ? '✅' : '❌'} ${testObj.name}: 
-                        ${result.message} (${score}/${testObj.weight} pts)
-                    </div>
-                `;
-                
-                const progress = Math.round((completed / tests.length) * 100);
-                testResults.innerHTML = `
-                    <h4>🧪 Pruebas Automáticas (${progress}% completado)</h4>
-                    <div class="progress-bar">
-                        <div class="progress" style="width: ${progress}%"></div>
-                    </div>
-                    ${resultsHTML}
-                    ${completed === tests.length ? `
-                        <div class="test-summary">
-                            <h4>📊 Resultado Final: ${totalScore}/${maxScore} puntos</h4>
-                            <p>Eficiencia: ${Math.round((totalScore/maxScore)*100)}%</p>
-                        </div>
-                    ` : ''}
-                `;
-                
-                updateStatus(`Pruebas: ${totalScore}/${maxScore} puntos`, totalScore === maxScore ? 'success' : 'warning');
+                if (result.passed) {
+                    passed++;
+                } else {
+                    failed++;
+                }
             } catch (error) {
-                completed++;
-                resultsHTML += `
-                    <div class="test-result failed">
-                        ❌ ${testObj.name}: ERROR - ${error.message} (0/${testObj.weight} pts)
-                    </div>
-                `;
-                testResults.innerHTML = `
-                    <h4>🧪 Pruebas Automáticas</h4>
-                    ${resultsHTML}
-                `;
+                failed++;
+            }
+
+            // Cuando es la última prueba, mostrar el resumen
+            if (index === tests.length - 1) {
+                const message = `Pruebas automáticas completadas: ${passed} éxitos, ${failed} fallos`;
+                updateStatus(message, failed === 0 ? 'success' : 'warning');
             }
         }, index * 500);
     });
@@ -809,14 +750,14 @@ function showError(message) {
     if (resultsContainer) {
         resultsContainer.innerHTML = `
             <div class="error-message">
-                <h4>❌ Error</h4>
+                <h4>Error</h4>
                 <p>${message}</p>
             </div>
         `;
     }
 }
 
-// === VALIDACIONES ===
+// === VALIDACIONES MEJORADAS ===
 
 function validateMatrixA() {
     if (!matrixA || matrixA.length === 0) {
@@ -836,6 +777,15 @@ function validateMatricesForOperation() {
     
     if (matrixA.length !== matrixB.length || matrixA[0].length !== matrixB[0].length) {
         throw new Error("Las matrices deben tener las mismas dimensiones");
+    }
+}
+
+function validateMatricesForMultiplication() {
+    validateMatrixA();
+    validateMatrixB();
+    
+    if (matrixA[0].length !== matrixB.length) {
+        throw new Error("El número de columnas de A debe ser igual al número de filas de B");
     }
 }
 

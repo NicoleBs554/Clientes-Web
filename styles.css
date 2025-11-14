@@ -127,18 +127,48 @@ input[type="number"]:focus {
     border-color: var(--color-secundario);
 }
 
+/* === BOTONES SIMPLIFICADOS === */
 button {
-    background: linear-gradient(135deg, var(--color-principal), var(--color-secundario));
+    background: var(--color-principal);
     color: white;
     border: none;
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
+    transition: all 0.3s ease;
 }
 
 button:hover {
-    background: linear-gradient(135deg, var(--color-secundario), var(--color-principal));
+    background: var(--color-secundario);
+}
+
+.operation-btn {
+    background: var(--color-secundario);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.operation-btn:hover {
+    background: var(--color-principal);
+    transform: translateY(-2px);
+}
+
+.btn-random {
+    background: var(--color-acento);
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.btn-test {
+    background: var(--color-principal);
+    width: 100%;
 }
 
 .matrix-container {
@@ -181,28 +211,11 @@ button:hover {
     border-radius: 3px;
 }
 
-
 .operations-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 15px;
     margin-bottom: 25px;
-}
-
-.operation-btn {
-    background: linear-gradient(135deg, var(--color-secundario), var(--color-principal));
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-    cursor: pointer;
-    font-weight: bold;
-    color: white;
-    border: 2px solid transparent;
-}
-
-.operation-btn:hover {
-    background: linear-gradient(135deg, var(--color-principal), var(--color-acento));
-    border-color: var(--color-acento);
 }
 
 .additional-controls {
@@ -225,17 +238,6 @@ button:hover {
     font-weight: 600;
     color: var(--color-principal);
     min-width: 150px;
-}
-
-.btn-random {
-    background: linear-gradient(135deg, #ff6b6b, #ff5252);
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-.btn-test {
-    background: linear-gradient(135deg, #9b59b6, #8e44ad);
-    width: 100%;
 }
 
 .results-section {
@@ -318,7 +320,7 @@ button:hover {
 .test-results {
     margin-top: 20px;
     padding: 20px;
-    background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+    background: #f3e5f5; /* ⭐ COLOR SÓLIDO */
     border-radius: 8px;
     border-left: 4px solid #9b59b6;
 }
@@ -340,21 +342,6 @@ button:hover {
     border-color: var(--color-error);
 }
 
-.progress-bar {
-    width: 100%;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    margin: 10px 0;
-    overflow: hidden;
-    height: 10px;
-}
-
-.progress {
-    height: 100%;
-    background: linear-gradient(90deg, var(--color-exito), var(--color-secundario));
-    border-radius: 10px;
-}
-
 .test-summary {
     margin-top: 15px;
     padding: 15px;
@@ -363,7 +350,6 @@ button:hover {
     text-align: center;
     border: 1px solid var(--color-borde);
 }
-
 .status-bar {
     position: fixed;
     bottom: 0;
@@ -384,6 +370,23 @@ footer {
     border-top: 1px solid #eee;
     color: #666;
     padding-bottom: 60px; 
+}
+
+.determinante-resultado {
+    text-align: center;
+    padding: 20px;
+}
+
+.det-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--color-exito);
+    margin: 10px 0;
+}
+
+.det-info {
+    color: #666;
+    font-style: italic;
 }
 
 @media (max-width: 768px) {
@@ -450,21 +453,4 @@ footer {
     .section-title {
         font-size: 1.1rem;
     }
-}
-
-.determinante-resultado {
-    text-align: center;
-    padding: 20px;
-}
-
-.det-value {
-    font-size: 2rem;
-    font-weight: bold;
-    color: var(--color-exito);
-    margin: 10px 0;
-}
-
-.det-info {
-    color: #666;
-    font-style: italic;
 }
