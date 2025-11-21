@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Interactiva</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div id="config-screen" class="screen active">
+            <h1>🎯Trivia Interactiva</h1>
+            <p>Configura tu juego de trivia personalizado</p>
+            
+            <form id="game-config">
+                <div class="form-group">
+                    <label for="player-name">Nombre del Jugador *</label>
+                    <input type="text" id="player-name" name="player-name" 
+                           minlength="2" maxlength="20" required 
+                           placeholder="Ingresa tu nombre (2-20 caracteres)">
+                    <span class="error-message" id="name-error"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="question-count">Cantidad de Preguntas</label>
+                    <input type="number" id="question-count" name="question-count" 
+                           min="5" max="20" value="10" required>
+                    <span class="info-text">Mínimo: 5, Máximo: 20</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="difficulty">Nivel de Dificultad</label>
+                    <select id="difficulty" name="difficulty" class="form-select">
+                        <option value="any">Aleatorio</option>
+                        <option value="easy">Fácil</option>
+                        <option value="medium">Medio</option>
+                        <option value="hard">Difícil</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="category">Categoría de Preguntas</label>
+                    <select id="category" name="category" class="form-select">
+                        <option value="any">Aleatorio</option>
+                        <option value="9">Cultura General</option>
+                        <option value="10">Entretenimiento: cine y juegos </option>
+                        <option value="17">Ciencias</option>
+                        <option value="22">Geografía</option>
+                        <option value="23">Historia</option>
+                        <option value="25">Arte</option>
+                    </select>
+                </div>
+                
+                <button type="submit" id="start-game-btn" class="btn btn-primary">
+                    Comenzar Juego
+                </button>
+            </form>
+        </div>
+        
+        <!-- Pantalla de Carga -->
+        <div id="loading-screen" class="screen">
+            <div class="loading-content">
+                <h2>Cargando Preguntas</h2>
+                <div class="loader"></div>
+                <p>Obteniendo preguntas de la API...</p>
+                <div class="loading-details">
+                    <span id="loading-category"></span>
+                    <span id="loading-difficulty"></span>
+                    <span id="loading-count"></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pantalla de Juego -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <div class="player-info">
+                    <span id="current-player">Jugador</span>
+                </div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <span class="stat-label">Puntuación</span>
+                        <span class="stat-value" id="current-score">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Progreso</span>
+                        <span class="stat-value" id="progress">1/10</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question-container">
+                <div class="question-header">
+                    <span class="category-badge" id="question-category">Categoría</span>
+                    <span class="difficulty-badge" id="question-difficulty">Dificultad</span>
+                </div>
+                
+                <div class="timer-container">
+                    <div class="timer" id="timer">
+                        <span id="time-left">20</span>s
+                    </div>
+                    <div class="timer-bar">
+                        <div class="timer-progress" id="timer-progress"></div>
+                    </div>
+                </div>
+                
+                <div class="question-text" id="question-text">
+                    ¿Cuál es la pregunta que se cargará desde la API?
+                </div>
+                
+                <div class="options-container" id="options-container">
+                    <!-- Las opciones se generarán dinámicamente -->
+                </div>
+                
+                <div class="game-feedback" id="game-feedback">
+                    <!-- Feedback se mostrará aquí -->
+                </div>
+            </div>
+            
+            <div class="game-controls">
+                <button id="next-question-btn" class="btn btn-secondary" disabled>
+                    Siguiente Pregunta
+                </button>
+            </div>
+        </div>
+
+        <div id="results-screen" class="screen">
+            <div class="results-header">
+                <h2>¡Juego Terminado!</h2>
+                <div class="player-results">
+                    <h3 id="result-player-name">Jugador</h3>
+                </div>
+            </div>
+            
+            <div class="results-stats">
+                <div class="result-stat">
+                    <div class="result-value" id="final-score">0</div>
+                    <div class="result-label">Puntuación Total</div>
+                </div>
+                <div class="result-stat">
+                    <div class="result-value" id="correct-answers">0/0</div>
+                    <div class="result-label">Respuestas Correctas</div>
+                </div>
+                <div class="result-stat">
+                    <div class="result-value" id="accuracy-rate">0%</div>
+                    <div class="result-label">Porcentaje de Aciertos</div>
+                </div>
+                <div class="result-stat">
+                    <div class="result-value" id="average-time">0s</div>
+                    <div class="result-label">Tiempo Promedio</div>
+                </div>
+            </div>
+            
+            <div class="results-details">
+                <h3>Detalles del Juego</h3>
+                <div class="detail-item">
+                    <span>Categoría:</span>
+                    <span id="result-category">Mixtas</span>
+                </div>
+                <div class="detail-item">
+                    <span>Dificultad:</span>
+                    <span id="result-difficulty">Mixto</span>
+                </div>
+                <div class="detail-item">
+                    <span>Total de Preguntas:</span>
+                    <span id="result-total-questions">10</span>
+                </div>
+                <div class="detail-item">
+                    <span>Tiempo Total:</span>
+                    <span id="result-total-time">0s</span>
+                </div>
+            </div>
+            
+            <div class="results-controls">
+                <button id="play-again-btn" class="btn btn-primary">
+                    Jugar Otra Vez
+                </button>
+                <button id="new-config-btn" class="btn btn-secondary">
+                    Nueva Configuración
+                </button>
+                <button id="exit-game-btn" class="btn btn-outline">
+                    Finalizar
+                </button>
+            </div>
+        </div>
+        
+        <!-- Modal de Error -->
+        <div id="error-modal" class="modal">
+            <div class="modal-content">
+                <h3>Error de Conexión</h3>
+                <p id="error-message">No se pudieron cargar las preguntas. Por favor, intenta de nuevo.</p>
+                <div class="modal-actions">
+                    <button id="retry-btn" class="btn btn-primary">Reintentar</button>
+                    <button id="config-modal-btn" class="btn btn-secondary">Cambiar Configuración</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
