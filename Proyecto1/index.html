@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Matrices Avanzada</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧮 Calculadora de Matrices</h1>
+            <p class="subtitle">Operaciones con matrices cuadradas de 2×2 hasta 10×10</p>
+        </header>
+        
+        <div class="main-content">
+            <section class="input-section">
+                <div class="section-title">Configuración de Matrices</div>
+                
+                <div class="matrix-controls">
+                    <div class="matrix-input">
+                        <h3>Matriz A</h3>
+                        <div class="dimension-inputs">
+                            <label for="sizeA">Tamaño (n×n):</label>
+                            <input type="number" id="sizeA" min="2" max="10" value="3">
+                            <button id="generateA" class="btn-generate">Generar</button>
+                        </div>
+                        <div class="matrix-container" id="matrixAContainer">
+                            <!-- Matriz A se genera aquí -->
+                        </div>
+                    </div>
+                    
+                    <div class="matrix-input">
+                        <h3>Matriz B</h3>
+                        <div class="dimension-inputs">
+                            <label for="sizeB">Tamaño (n×n):</label>
+                            <input type="number" id="sizeB" min="2" max="10" value="3">
+                            <button id="generateB" class="btn-generate">Generar</button>
+                        </div>
+                        <div class="matrix-container" id="matrixBContainer">
+                            <!-- Matriz B se genera aquí -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="additional-controls">
+                    <div class="control-group">
+                        <label for="scalarValue">Valor escalar (k):</label>
+                        <input type="number" id="scalarValue" value="2" step="any">
+                    </div>
+                    
+                    <button id="randomExample" class="btn-random">Ejemplo Aleatorio</button>
+                    <button id="runTests" class="btn-test">Ejecutar Pruebas</button>
+                </div>
+            </section>
+            
+            <section class="operations-section">
+                <div class="section-title">Operaciones Disponibles</div>
+                
+                <div class="operations-grid">
+                    <div class="operation-btn" data-operation="add" data-tooltip="Suma de A + B">Suma (A + B)</div>
+                    <div class="operation-btn" data-operation="subtractAB" data-tooltip="Resta de A - B">Resta (A - B)</div>
+                    <div class="operation-btn" data-operation="subtractBA" data-tooltip="Resta de B - A">Resta (B - A)</div>
+                    <div class="operation-btn" data-operation="multiply" data-tooltip="Multiplicación de A × B">Multiplicación (A × B)</div>
+                    <div class="operation-btn" data-operation="scalarA" data-tooltip="Multiplicación escalar k × A">Escalar × A</div>
+                    <div class="operation-btn" data-operation="transposeA" data-tooltip="Transposición de A">Transpuesta Aᵀ</div>
+                    <div class="operation-btn" data-operation="determinantA" data-tooltip="Determinante de A">Determinante det(A)</div>
+                    <div class="operation-btn" data-operation="inverseA" data-tooltip="Inversa de A">Inversa A⁻¹</div>
+                    <div class="operation-btn" data-operation="identity" data-tooltip="Matriz identidad del tamaño de A">Identidad Iₙ</div>
+                </div>
+                
+                <div class="results-section">
+                    <div class="section-title">🎯 Resultados</div>
+                    <div id="resultsContainer">
+                        <p class="placeholder">Selecciona una operación para ver los resultados.</p>
+                    </div>
+                    <div id="testResults" class="test-results"></div>
+                    <div id="verificationMessage" class="verification-message"></div>
+                </div>
+            </section>
+        </div>
+        
+        <div class="status-bar">
+            <div id="statusMessage" class="status-message">Listo para operar</div>
+        </div>
+        
+        <footer>
+            <p>Calculadora de Matrices - Creada con HTML, CSS y JavaScript</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

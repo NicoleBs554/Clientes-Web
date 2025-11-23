@@ -1,4 +1,3 @@
-
 let playerName = '';
 let questions = [];
 let currentQuestionIndex = 0;
@@ -7,6 +6,9 @@ let correctAnswers = 0;
 let timer;
 let timeLeft = 20;
 let selectedOption = null;
+let totalTimeSpent = 0;
+let gameStartTime = 0;
+let questionStartTime = 0;
 
 const screens = {
     config: document.getElementById('config-screen'),
@@ -30,31 +32,64 @@ const elements = {
     nextQuestionBtn: document.getElementById('next-question-btn'),
     timeLeft: document.getElementById('time-left'),
     timerProgress: document.getElementById('timer-progress'),
+    timer: document.getElementById('timer'),
     finalScore: document.getElementById('final-score'),
     correctAnswers: document.getElementById('correct-answers'),
     accuracyRate: document.getElementById('accuracy-rate'),
     resultPlayerName: document.getElementById('result-player-name'),
     playAgainBtn: document.getElementById('play-again-btn'),
     newConfigBtn: document.getElementById('new-config-btn'),
-    exitGameBtn: document.getElementById('exit-game-btn')
+    exitGameBtn: document.getElementById('exit-game-btn'),
+    questionCategory: document.getElementById('question-category'),
+    questionDifficulty: document.getElementById('question-difficulty'),
+    resultCategory: document.getElementById('result-category'),
+    resultDifficulty: document.getElementById('result-difficulty'),
+    resultTotalQuestions: document.getElementById('result-total-questions'),
+    resultTotalTime: document.getElementById('result-total-time'),
+    averageTime: document.getElementById('average-time'),
+    loadingCategory: document.getElementById('loading-category'),
+    loadingDifficulty: document.getElementById('loading-difficulty'),
+    loadingCount: document.getElementById('loading-count'),
+    retryBtn: document.getElementById('retry-btn'),
+    configModalBtn: document.getElementById('config-modal-btn'),
+    errorModal: document.getElementById('error-modal')
+};
+
+const categoryMap = {
+    '9': 'Conocimiento General',
+    '11': 'Entretenimiento: Cine',
+    '17': 'Ciencia y Naturaleza',
+    '22': 'Geografía',
+    '23': 'Historia',
+    '25': 'Arte'
+};
+
+const apiCategoryMap = {
+    'General Knowledge': '9',
+    'Entertainment: Film': '11',
+    'Science & Nature': '17',
+    'Geography': '22',
+    'History': '23',
+    'Art': '25'
 };
 
 function showScreen(screenName) {
     Object.values(screens).forEach(screen => {
         screen.classList.remove('active');
     });
-
     screens[screenName].classList.add('active');
 }
 
 function validateConfig() {
     const name = elements.playerName.value.trim();
+    const nameError = document.getElementById('name-error');
     
     if (name.length < 2 || name.length > 20) {
-        alert('El nombre debe tener entre 2 y 20 caracteres');
+        nameError.textContent = 'El nombre debe tener entre 2 y 20 caracteres';
         return false;
     }
     
+    nameError.textContent = '';
     const questionCount = parseInt(elements.questionCount.value);
     if (questionCount < 5 || questionCount > 20) {
         alert('La cantidad de preguntas debe ser entre 5 y 20');
@@ -64,7 +99,7 @@ function validateConfig() {
     return true;
 }
 
-function startGame(event) {
+async function startGame(event) {
     event.preventDefault();
     
     if (!validateConfig()) {
@@ -75,32 +110,70 @@ function startGame(event) {
     elements.currentPlayer.textContent = playerName;
     
     showScreen('loading');
+
+    const categoryText = elements.category.options[elements.category.selectedIndex].text;
+    const difficultyText = elements.difficulty.options[elements.difficulty.selectedIndex].text;
+    const questionCount = elements.questionCount.value;
     
-    setTimeout(() => {
-        loadQuestions();
+    elements.loadingCategory.textContent = `Categoría: ${categoryText}`;
+    elements.loadingDifficulty.textContent = `Dificultad: ${difficultyText}`;
+    elements.loadingCount.textContent = `Preguntas: ${questionCount}`;
+    
+    try {
+        await loadQuestionsFromAPI();
+        gameStartTime = Date.now();
         showScreen('game');
         showQuestion();
-    }, 2000);
+    } catch (error) {
+        console.error('Error al cargar preguntas:', error);
+        showErrorModal('No se pudieron cargar las preguntas. Por favor, intenta de nuevo.');
+    }
 }
 
+async function loadQuestionsFromAPI() {
+    const questionCount = elements.questionCount.value;
+    const difficulty = elements.difficulty.value;
+    const category = elements.category.value;
 
-function loadQuestions() {
-    questions = [
-        {
-            question: "¿Cuál es la capital de Francia?",
-            correct_answer: "París",
-            incorrect_answers: ["Londres", "Berlín", "Madrid"],
-            category: "Geografía",
-            difficulty: "easy"
-        },
-        {
-            question: "¿En qué año llegó el hombre a la luna?",
-            correct_answer: "1969",
-            incorrect_answers: ["1955", "1975", "1980"],
-            category: "Historia",
-            difficulty: "medium"
+    let apiUrl = `https://opentdb.com/api.php?amount=${questionCount}&type=multiple`;
+    
+    if (category !== 'any') {
+        apiUrl += `&category=${category}`;
+    }
+    
+    if (difficulty !== 'any') {
+        apiUrl += `&difficulty=${difficulty}`;
+    }
+    
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        
+        if (data.response_code === 0) {
+            questions = data.results;
+        } else {
+            if (category !== 'any') {
+                console.warn('Error con categoría específica, intentando con categoría aleatoria');
+                let fallbackUrl = `https://opentdb.com/api.php?amount=${questionCount}&type=multiple`;
+                if (difficulty !== 'any') {
+                    fallbackUrl += `&difficulty=${difficulty}`;
+                }
+                
+                const fallbackResponse = await fetch(fallbackUrl);
+                const fallbackData = await fallbackResponse.json();
+                
+                if (fallbackData.response_code === 0) {
+                    questions = fallbackData.results;
+                } else {
+                    throw new Error('No se pudieron cargar las preguntas de la API');
+                }
+            } else {
+                throw new Error('No se pudieron cargar las preguntas de la API');
+            }
         }
-    ];
+    } catch (error) {
+        throw new Error('Error de conexión: ' + error.message);
+    }
 }
 
 function showQuestion() {
@@ -110,20 +183,23 @@ function showQuestion() {
     }
     
     const question = questions[currentQuestionIndex];
+    questionStartTime = Date.now();
     
     elements.progress.textContent = `${currentQuestionIndex + 1}/${questions.length}`;
+    elements.questionText.textContent = decodeHTML(question.question);
 
-    elements.questionText.textContent = question.question;
-
+    elements.questionCategory.textContent = getCategoryName(question.category);
+    elements.questionDifficulty.textContent = getDifficultyName(question.difficulty);
+    
     elements.optionsContainer.innerHTML = '';
-
+    
     const options = [...question.incorrect_answers, question.correct_answer];
     shuffleArray(options);
     
     options.forEach(option => {
         const button = document.createElement('button');
         button.className = 'option-btn';
-        button.textContent = option;
+        button.textContent = decodeHTML(option);
         button.addEventListener('click', () => selectOption(option, question.correct_answer));
         elements.optionsContainer.appendChild(button);
     });
@@ -136,7 +212,22 @@ function showQuestion() {
     startTimer();
 }
 
-// Función para mezclar array
+function getCategoryName(apiCategory) {
+    if (apiCategoryMap[apiCategory]) {
+        return categoryMap[apiCategoryMap[apiCategory]];
+    }
+    return apiCategory;
+}
+
+function getDifficultyName(difficulty) {
+    const difficultyMap = {
+        'easy': 'Fácil',
+        'medium': 'Medio',
+        'hard': 'Difícil'
+    };
+    return difficultyMap[difficulty] || difficulty;
+}
+
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -145,24 +236,24 @@ function shuffleArray(array) {
     return array;
 }
 
-// Función para seleccionar una opción
 function selectOption(selected, correct) {
     if (selectedOption !== null) return;
     
     selectedOption = selected;
-    
-    // Deshabilitar todas las opciones
+
+    const questionTime = (Date.now() - questionStartTime) / 1000;
+    totalTimeSpent += questionTime;
+
     const optionButtons = elements.optionsContainer.querySelectorAll('.option-btn');
     optionButtons.forEach(btn => {
         btn.disabled = true;
-        if (btn.textContent === correct) {
+        if (decodeHTML(btn.textContent) === correct) {
             btn.classList.add('correct');
         }
     });
     
-    // Marcar la seleccionada
     optionButtons.forEach(btn => {
-        if (btn.textContent === selected) {
+        if (decodeHTML(btn.textContent) === selected) {
             if (selected === correct) {
                 btn.classList.add('correct');
                 handleCorrectAnswer();
@@ -172,15 +263,12 @@ function selectOption(selected, correct) {
             }
         }
     });
-    
-    // Detener temporizador
+
     clearInterval(timer);
-    
-    // Habilitar botón siguiente
+
     elements.nextQuestionBtn.disabled = false;
 }
 
-// Función para manejar respuesta correcta
 function handleCorrectAnswer() {
     score += 10;
     correctAnswers++;
@@ -189,7 +277,6 @@ function handleCorrectAnswer() {
     elements.gameFeedback.className = 'game-feedback feedback-correct';
 }
 
-// Función para manejar respuesta incorrecta
 function handleIncorrectAnswer() {
     elements.gameFeedback.textContent = 'Incorrecto. Sigue intentando.';
     elements.gameFeedback.className = 'game-feedback feedback-incorrect';
@@ -199,6 +286,7 @@ function startTimer() {
     timeLeft = 20;
     elements.timeLeft.textContent = timeLeft;
     elements.timerProgress.style.width = '100%';
+    elements.timer.classList.remove('warning');
     
     timer = setInterval(() => {
         timeLeft--;
@@ -218,12 +306,14 @@ function startTimer() {
 
 function handleTimeUp() {
     if (selectedOption === null) {
+        totalTimeSpent += 20;
+        
         const question = questions[currentQuestionIndex];
         const optionButtons = elements.optionsContainer.querySelectorAll('.option-btn');
         
         optionButtons.forEach(btn => {
             btn.disabled = true;
-            if (btn.textContent === question.correct_answer) {
+            if (decodeHTML(btn.textContent) === question.correct_answer) {
                 btn.classList.add('correct');
             }
         });
@@ -240,10 +330,21 @@ function nextQuestion() {
 }
 
 function endGame() {
+    const totalTime = (Date.now() - gameStartTime) / 1000;
+    const averageTime = totalTimeSpent / questions.length;
+    
     elements.finalScore.textContent = score;
     elements.correctAnswers.textContent = `${correctAnswers}/${questions.length}`;
     elements.accuracyRate.textContent = `${Math.round((correctAnswers / questions.length) * 100)}%`;
+    elements.averageTime.textContent = `${averageTime.toFixed(1)}s`;
     elements.resultPlayerName.textContent = playerName;
+
+    const categoryText = elements.category.options[elements.category.selectedIndex].text;
+    const difficultyText = elements.difficulty.options[elements.difficulty.selectedIndex].text;
+    elements.resultCategory.textContent = categoryText;
+    elements.resultDifficulty.textContent = difficultyText;
+    elements.resultTotalQuestions.textContent = questions.length;
+    elements.resultTotalTime.textContent = `${totalTime.toFixed(1)}s`;
     
     showScreen('results');
 }
@@ -252,7 +353,9 @@ function resetGame() {
     currentQuestionIndex = 0;
     score = 0;
     correctAnswers = 0;
+    totalTimeSpent = 0;
     elements.currentScore.textContent = '0';
+    
     showScreen('game');
     showQuestion();
 }
@@ -260,6 +363,33 @@ function resetGame() {
 function backToConfig() {
     resetGame();
     showScreen('config');
+}
+
+function showErrorModal(message) {
+    document.getElementById('error-message').textContent = message;
+    elements.errorModal.classList.add('active');
+}
+
+function hideErrorModal() {
+    elements.errorModal.classList.remove('active');
+}
+
+function decodeHTML(html) {
+    if (!html) return '';
+
+    const txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    let decoded = txt.value;
+    
+    // Luego decodificar URL encoding (como %20, %C3%A1, etc.)
+    try {
+        decoded = decodeURIComponent(decoded.replace(/\+/g, ' '));
+    } catch (e) {
+        // Si falla la decodificación URL, mantener el texto decodificado de HTML
+        console.warn('Error decoding URL, using HTML decoded version:', e);
+    }
+    
+    return decoded;
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -273,19 +403,36 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('¡Gracias por jugar!');
         backToConfig();
     });
-    
+
     elements.playerName.addEventListener('input', function() {
         const name = this.value.trim();
+        const nameError = document.getElementById('name-error');
+        
         if (name.length < 2 || name.length > 20) {
             this.style.borderColor = '#e74c3c';
+            nameError.textContent = 'El nombre debe tener entre 2 y 20 caracteres';
         } else {
             this.style.borderColor = '#2ecc71';
+            nameError.textContent = '';
         }
     });
+    
+    elements.retryBtn.addEventListener('click', function() {
+        hideErrorModal();
+        showScreen('loading');
+        loadQuestionsFromAPI()
+            .then(() => {
+                gameStartTime = Date.now();
+                showScreen('game');
+                showQuestion();
+            })
+            .catch(error => {
+                showErrorModal('Error al cargar las preguntas: ' + error.message);
+            });
+    });
+    
+    elements.configModalBtn.addEventListener('click', function() {
+        hideErrorModal();
+        showScreen('config');
+    });
 });
-
-function decodeHTML(html) {
-    const txt = document.createElement('textarea');
-    txt.innerHTML = html;
-    return txt.value;
-}
